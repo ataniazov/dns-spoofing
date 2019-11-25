@@ -9,6 +9,8 @@ $ sudo apt dist-upgrade
 $ sudo apt install build-essential python-dev python3-dev libnetfilter-queue-dev
 $ sudo apt install curl nmap tcpdump libpcap0.8
 
+$ sudo apt install sudo apt install libnfnetlink-dev libnetfilter-conntrack-dev
+
 $ sudo apt install python3-distutils python3-testresources
 $ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 $ python3 get-pip.py --user
@@ -19,4 +21,8 @@ $ pip install --pre scapy[complete] --user
 
 $ pip install netfilter --user
 $ pip install netfilterqueue --user
+
+$ iptables -A INPUT -p udp  --sport 53 -j NFQUEUE --queue-num 1
+$ iptables -L -nv
+
 ```
