@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# sudo iptables -A INPUT -p udp  --sport 53 -j NFQUEUE --queue-num 1
+# sudo iptables -A OUTPUT -p udp --dport 53 -j NFQUEUE --queue-num 1
 
 from scapy.all import *
 from netfilterqueue import NetfilterQueue
@@ -14,14 +14,15 @@ def decision(packet):
 
     if not payload.haslayer(DNSQR):
         # Not a dns query, accept and go on
-        return True
+        return False
     else:
         print("Payload summary: {}".format(payload.summary()))
         #payload.show()
         #frame_len = packet.get_payload_len()
-        frame_len = len(payload)
+        #frame_len = len(payload)
         ip_flag = ("DF" in payload.flags)
         ip_len = payload.len
+        frame_len = ip_len + 14
         qname = payload[DNS].qd.qname
 
         return ml(frame_len, ip_flag, ip_len, qname.decode("utf-8"), len(qname.decode("utf-8")))

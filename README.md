@@ -17,12 +17,13 @@ $ python3 get-pip.py --user
 $ pip install -U pip
 
 $ pip install matplotlib --user
-$ pip install --pre scapy[complete] --user
+$ pip install --pre scapy[basic] --user
+#$ pip install --pre scapy[complete] --user
 
 $ pip install netfilter --user
 $ pip install netfilterqueue --user
 
-$ iptables -A INPUT -p udp  --sport 53 -j NFQUEUE --queue-num 1
-$ iptables -L -nv
+$ sudo iptables -A OUTPUT -p udp --dport 53 -j NFQUEUE --queue-num 1
+$ sudo iptables -L -nv
 
 ```
