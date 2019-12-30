@@ -27,3 +27,12 @@ $ sudo iptables -A OUTPUT -p udp --dport 53 -j NFQUEUE --queue-num 1
 $ sudo iptables -L -nv
 
 ```
+
+```
+sudo iptables -D OUTPUT -p udp --dport 53 -j NFQUEUE --queue-num 1
+
+sudo iptables -L --line-numbers
+sudo iptables -D OUTPUT line-number
+
+sudo iptables -P OUTPUT ACCEPT
+```
