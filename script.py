@@ -2,11 +2,13 @@
 
 # sudo iptables -A OUTPUT -p udp --dport 53 -j NFQUEUE --queue-num 1
 
+import time
 from scapy.all import *
 from netfilterqueue import NetfilterQueue
 
 def ml(frame_len, ip_flag, ip_len, qname, qname_len):
-    print(frame_len, ip_flag, ip_len, qname, qname_len)
+    #print(frame_len, ip_flag, ip_len, qname, qname_len)
+    #return False
     return True
 
 def decision(packet):
@@ -16,7 +18,7 @@ def decision(packet):
         # Not a dns query, accept and go on
         return False
     else:
-        print("Payload summary: {}".format(payload.summary()))
+        #print("Payload summary: {}".format(payload.summary()))
         #payload.show()
         #frame_len = packet.get_payload_len()
         #frame_len = len(payload)
@@ -28,10 +30,14 @@ def decision(packet):
         return ml(frame_len, ip_flag, ip_len, qname.decode("utf-8"), len(qname.decode("utf-8")))
 
 def firewall(packet):
+    start_time = time.time()
+
     if decision(packet):
         packet.drop()
     else:
         packet.accept()
+
+    print("--- %s seconds ---" % (time.time() - start_time))
 
 queueId = 1
 
